@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="42dp">
+
+        <TextView
+            android:id="@+id/sortTextView"
+            android:layout_width="157dp"
+            android:layout_height="match_parent"
+            android:text="Sortuj:" />
+
+        <Spinner
+            android:id="@+id/sortSpinner"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="555dp">
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </ScrollView>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <Button
+                android:id="@+id/addBtn"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="29dp"
+                android:layout_marginEnd="47dp"
+                android:text="Dodaj"
+                app:layout_constraintBottom_toBottomOf="@+id/deleteBtn"
+                app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/searchBtn" />
+
+            <Button
+                android:id="@+id/searchBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="75dp"
+                android:text="Szukaj"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/deleteBtn" />
+
+            <Button
+                android:id="@+id/locationBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="22dp"
+                android:layout_marginBottom="17dp"
+                android:text="Lokalizacje"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/addBtn" />
+
+            <Button
+                android:id="@+id/deleteBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="54dp"
+                android:layout_marginBottom="8dp"
+                android:text="Usuń"
+                app:layout_constraintBottom_toTopOf="@+id/locationBtn"
+                app:layout_constraintEnd_toStartOf="@+id/searchBtn"
+                app:layout_constraintStart_toEndOf="@+id/addBtn" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RelativeLayout>
+
+</LinearLayout>
