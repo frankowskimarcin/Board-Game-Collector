@@ -1,6 +1,6 @@
 package com.example.boardgamecollector
 
-class BoardGame {
+class BoardGame(title: String?, originalTitle: String?, publicationYear: Int, description: String?, orderDate: String?, addedDate: String?, price: String?, scd: String?, code: String?, bggId: Int, productionCode: String?, ranking: Int, gameType: String?, comment: String?, image: String?, location: String?) {
     var title: String? = null
     var originalTitle: String? = null
     var publicationYear: String? = null
