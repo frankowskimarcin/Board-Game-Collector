@@ -44,8 +44,8 @@
 
             <Button
                 android:id="@+id/addBtn"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
+                android:layout_width="97dp"
+                android:layout_height="52dp"
                 android:layout_marginStart="29dp"
                 android:layout_marginEnd="47dp"
                 android:text="Dodaj"
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
-                android:layout_marginBottom="75dp"
+                android:layout_marginBottom="76dp"
                 android:text="Szukaj"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

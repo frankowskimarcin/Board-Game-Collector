@@ -1,9 +1,30 @@
 package com.example.boardgamecollector
 
-class BoardGame(title: String?, originalTitle: String?, publicationYear: Int, description: String?, orderDate: String?, addedDate: String?, price: String?, scd: String?, code: String?, bggId: Int, productionCode: String?, ranking: Int, gameType: String?, comment: String?, image: String?, location: String?) {
+class BoardGame {
+    constructor(
+        title: String?,
+        originalTitle: String?,
+        publicationYear: Int?,
+        description: String?,
+        orderDate: String?,
+        addedDate: String?,
+        price: String?,
+        scd: String?,
+        code: String?,
+        bggId: Int?,
+        productionCode: String?,
+        ranking: Int?,
+        gameType: String?,
+        comment: String?,
+        image: String?,
+        location: String?
+    )
+
+    constructor()
+
     var title: String? = null
     var originalTitle: String? = null
-    var publicationYear: String? = null
+    var publicationYear: Int? = 0
     var description: String? = null
     var orderDate: String? = null
     var addedDate: String? = null

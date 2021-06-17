@@ -1,28 +1,38 @@
 package com.example.boardgamecollector
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.TextView
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 
 
 class MainActivity : AppCompatActivity() {
+
+//    private val addButton: Button = findViewById(R.id.addBtn)
+//    private val deleteButton: Button = findViewById(R.id.deleteBtn)
+//    private val searchButton: Button = findViewById(R.id.searchBtn)
+//    private val locationButton: Button = findViewById(R.id.locationBtn)
+//    private val sortText: TextView = findViewById(R.id.sortTextView)
+//    private val sortSpinner: Spinner = findViewById(R.id.sortSpinner)
+
+    private var gamesToDelete: MutableList<String> = ArrayList()
+    private var sortValue = "alfabetycznie"
+
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        loadGames()
-
         val addButton: Button = findViewById(R.id.addBtn)
         val deleteButton: Button = findViewById(R.id.deleteBtn)
         val searchButton: Button = findViewById(R.id.searchBtn)
         val locationButton: Button = findViewById(R.id.locationBtn)
         val sortText: TextView = findViewById(R.id.sortTextView)
         val sortSpinner: Spinner = findViewById(R.id.sortSpinner)
+        loadAndDisplayGames()
 
         sortText.text = "Sortuj:"
         sortText.textSize = 18F
@@ -30,28 +40,40 @@ class MainActivity : AppCompatActivity() {
 
         addItemsOnSpinner(sortSpinner)
 
-        setClickListeners(addButton, deleteButton, searchButton, locationButton)
+        sortSpinner.onItemSelectedListener = object :
+                AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(p0: AdapterView<*>?) {}
 
+            override fun onItemSelected(p0: AdapterView<*>?, p1: View?, p2: Int, p3: Long) {
+                sortValue = sortSpinner.selectedItem.toString()
+                Log.i("TAG", sortValue)
+                loadAndDisplayGames()
+            }
 
-
+        }
     }
 
-    private fun setClickListeners(addButton: Button, deleteButton: Button, searchButton: Button, locationButton: Button) {
-        addButton.setOnClickListener{
+    fun showActivityAddButton(v: View){
+        val i = Intent(this, AddGameActivity::class.java)
+        startActivity(i)
+    }
 
+    fun showActivitySearchButton(v: View){
+        val i = Intent(this, AddGameActivity::class.java) // TODO
+        startActivity(i)
+    }
+
+    fun showActivityLocationButton(v: View){
+        val i = Intent(this, AddGameActivity::class.java) // TODO
+        startActivity(i)
+    }
+
+    fun onDeleteButton(v: View){
+        val dbHandler = MyDBHandler(this, null, null, 1)
+        for (game in gamesToDelete){
+            dbHandler.deleteGame(game)
         }
-
-        deleteButton.setOnClickListener {
-
-        }
-
-        searchButton.setOnClickListener {
-
-        }
-
-        locationButton.setOnClickListener {
-
-        }
+        loadAndDisplayGames()
     }
 
     private fun addItemsOnSpinner(sortSpinner: Spinner) {
@@ -64,7 +86,10 @@ class MainActivity : AppCompatActivity() {
         sortSpinner.adapter = adapter
     }
 
-    private fun loadGames(){
+    private fun loadAndDisplayGames() {
+        val dbHandler = MyDBHandler(this, null, null, 1)
+        val games = dbHandler.getAllGames(sortValue)
+
 
     }
 }

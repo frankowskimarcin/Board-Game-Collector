@@ -1,10 +1,12 @@
 package com.example.boardgamecollector
 
+import android.annotation.SuppressLint
 import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.core.database.getStringOrNull
+import androidx.core.database.getIntOrNull as getIntOrNull1
 
 class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int):
         SQLiteOpenHelper(context, DATABASE_NAME, factory, DATABASE_VERSION){
@@ -79,7 +81,8 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
                 COLUMN_GAME_TYPE + " TEXT, " +
                 COLUMN_COMMENT + " TEXT, " +
                 COLUMN_IMAGE + " TEXT, " +
-                COLUMN_LOCATION + " TEXT FOREIGN KEY REFERENCES "+ TABLE_LOCATIONS + "(" + COLUMN_LOCATION_NAME + ")" +
+                COLUMN_LOCATION + " TEXT, " +
+                "FOREIGN KEY (" + COLUMN_LOCATION + ") REFERENCES "+ TABLE_LOCATIONS + "(" + COLUMN_LOCATION_NAME + ")" +
                 ")")
         db?.execSQL(CREATE_TABLE_GAMES)
 
@@ -125,7 +128,8 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
                 TABLE_EXPANSIONS + "(" +
                 COLUMN_EXPANSION_ID + " INTEGER PRIMARY KEY, " +
                 COLUMN_EXPANSION_TITLE + " TEXT, " +
-                COLUMN_EXPANSION_GAME + " TEXT FOREIGN KEY REFERENCES "+ TABLE_GAMES + "(" + COLUMN_TITLE + ")" +
+                COLUMN_EXPANSION_GAME + " TEXT, " +
+                "FOREIGN KEY (" + COLUMN_EXPANSION_GAME + ") REFERENCES " + TABLE_GAMES + "(" + COLUMN_TITLE + ")" +
                 ")")
         db?.execSQL(CREATE_TABLE_EXPANSIONS)
 
@@ -134,7 +138,8 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
                 COLUMN_RANKING_ID + " INTEGER PRIMARY KEY, " +
                 COLUMN_RANKING_DATE + " TEXT, " +
                 COLUMN_RANKING_RANK + " TEXT, " +
-                COLUMN_RANKING_TITLE + " TEXT FOREIGN KEY REFERENCES "+ TABLE_GAMES + "(" + COLUMN_TITLE + ")" +
+                COLUMN_RANKING_TITLE + " TEXT, " +
+                "FOREIGN KEY (" + COLUMN_RANKING_TITLE + ") REFERENCES " + TABLE_GAMES + "(" + COLUMN_TITLE + ")" +
                 ")")
         db?.execSQL(CREATE_TABLE_RANKING)
 
@@ -230,7 +235,30 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
 
     }
 
-    fun getAllGames(){
+    @SuppressLint("Recycle")
+    fun getAllGames(sortValue: String): MutableList<BoardGame>{
+        var sortColumn: String? = null
+        when(sortValue){
+            "alfabetycznie" -> sortColumn = COLUMN_TITLE
+            "data wydania" -> sortColumn = COLUMN_PUBLICATION_YEAR
+            "pozycja rankingu" -> sortColumn = COLUMN_RANKING
+        }
+        val query = "SELECT * FROM $TABLE_GAMES ORDER BY $sortColumn"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, null)
+        val returnList:MutableList<BoardGame> = ArrayList()
+        while (cursor.moveToNext()){
+            val game = BoardGame()
+            game.title = cursor.getStringOrNull(0)
+            game.publicationYear = cursor.getIntOrNull1(3)
+            game.description = cursor.getStringOrNull(4)
+            game.ranking = cursor.getIntOrNull1(12)
+            game.image = cursor.getStringOrNull(15)
+            returnList.add(game)
+        }
+        cursor.close()
+        db.close()
 
+        return returnList
     }
 }
