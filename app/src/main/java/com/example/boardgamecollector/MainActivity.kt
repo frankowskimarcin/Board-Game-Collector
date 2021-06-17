@@ -3,6 +3,7 @@ package com.example.boardgamecollector
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.util.Log
 import android.view.Gravity
 import android.view.View
@@ -19,6 +20,8 @@ class MainActivity : AppCompatActivity() {
 //    private val sortText: TextView = findViewById(R.id.sortTextView)
 //    private val sortSpinner: Spinner = findViewById(R.id.sortSpinner)
 
+    private var listView: ListView? = null
+
     private var gamesToDelete: MutableList<String> = ArrayList()
     private var sortValue = "alfabetycznie"
 
@@ -32,6 +35,7 @@ class MainActivity : AppCompatActivity() {
         val locationButton: Button = findViewById(R.id.locationBtn)
         val sortText: TextView = findViewById(R.id.sortTextView)
         val sortSpinner: Spinner = findViewById(R.id.sortSpinner)
+        listView = findViewById(R.id.gamesList);
         loadAndDisplayGames()
 
         sortText.text = "Sortuj:"
@@ -51,6 +55,16 @@ class MainActivity : AppCompatActivity() {
             }
 
         }
+
+//        listView.setOnItemClickListener(object : AdapterView.OnItemClickListener {
+//            fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int,
+//                            id: Long) {
+//                val intent = Intent(context, SendMessage::class.java)
+//                val message = "abc"
+//                intent.putExtra(EXTRA_MESSAGE, message)
+//                startActivity(intent)
+//            }
+//        })
     }
 
     fun showActivityAddButton(v: View){
@@ -89,6 +103,8 @@ class MainActivity : AppCompatActivity() {
     private fun loadAndDisplayGames() {
         val dbHandler = MyDBHandler(this, null, null, 1)
         val games = dbHandler.getAllGames(sortValue)
+        val gameAdapter = BoardGameAdapter(this, games as java.util.ArrayList<BoardGame>?)
+        listView!!.adapter = gameAdapter
 
 
     }
