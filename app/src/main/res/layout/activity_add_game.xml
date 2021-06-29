@@ -25,6 +25,269 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:onClick="onSearchButton"
             android:text="Szukaj" />
     </LinearLayout>
+
+    <ScrollView
+        android:id="@+id/ScrollViewBgg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:id="@+id/LinearLayoutBgg"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TableLayout
+                android:id="@+id/tableLayoutBgg"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <Button
+                android:id="@+id/AddDetailsBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onAddDetailsButton"
+                android:text="Wpisz szczegóły gry ręcznie" />
+        </LinearLayout>
+    </ScrollView>
+
+    <ScrollView
+        android:id="@+id/ScrollViewDetails"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <LinearLayout
+            android:id="@+id/LinearLayoutDetails"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/textViewTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tytuł gry:" />
+
+            <EditText
+                android:id="@+id/editTextTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewOriginalTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Oryginalny tytuł:" />
+
+            <EditText
+                android:id="@+id/editTextOriginalTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewPublicationYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rok wydania:" />
+
+            <NumberPicker
+                android:id="@+id/NumberPickerPublicationYear"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textViewDesigners"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Projektant:" />
+
+            <EditText
+                android:id="@+id/editTextDesigners"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewArtists"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Artysta:" />
+
+            <EditText
+                android:id="@+id/editTextArtists"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Opis:" />
+
+            <EditText
+                android:id="@+id/editTextDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewOrderDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Data zamówienia:" />
+
+            <DatePicker
+                android:id="@+id/DatePickerOrderDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner" />
+
+            <TextView
+                android:id="@+id/textViewAddedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Data dodania:" />
+
+            <DatePicker
+                android:id="@+id/DatePickerAddedDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:calendarViewShown="false"
+                android:datePickerMode="spinner" />
+
+            <TextView
+                android:id="@+id/textViewPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Cena zakupu:" />
+
+            <EditText
+                android:id="@+id/editTextPrice"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewSCD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Sugerowana cena detaliczna:" />
+
+            <EditText
+                android:id="@+id/editTextSCD"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kod EAN/UPC:" />
+
+            <EditText
+                android:id="@+id/editTextCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewProductionCode"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Kod produkcyjny:" />
+
+            <EditText
+                android:id="@+id/editTextProductionCod"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Typ gry:" />
+
+            <Spinner
+                android:id="@+id/spinnerType"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textViewExpansions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Dodatki:" />
+
+            <EditText
+                android:id="@+id/editTextExpansions"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <TextView
+                android:id="@+id/textViewLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lokalizacja:" />
+
+            <Spinner
+                android:id="@+id/spinnerLocation"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/textViewComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Komentarz:" />
+
+            <EditText
+                android:id="@+id/editTextComment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName"
+                android:text="Name" />
+
+            <Button
+                android:id="@+id/addNewGameBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="onAddNewGameButton"
+                android:text="Dodaj grę" />
+
+        </LinearLayout>
+    </ScrollView>
 </LinearLayout>

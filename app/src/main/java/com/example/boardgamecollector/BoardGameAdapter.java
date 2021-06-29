@@ -1,5 +1,6 @@
 package com.example.boardgamecollector;
 
+import android.annotation.SuppressLint;
 import android.widget.ArrayAdapter;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -23,6 +24,7 @@ public class BoardGameAdapter extends ArrayAdapter<BoardGame> {
     }
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     public View getView(int position, View convertView,  ViewGroup parent) {
         View listItem = convertView;
@@ -32,10 +34,11 @@ public class BoardGameAdapter extends ArrayAdapter<BoardGame> {
         BoardGame currentGame = gamesList.get(position);
 
         TextView rank = (TextView) listItem.findViewById(R.id.textView_rank);
-        rank.setText(currentGame.getRanking());
+        rank.setText(currentGame.getRanking().toString());
 
         ImageView image = (ImageView)listItem.findViewById(R.id.imageView);
         image.setImageResource(Integer.parseInt(currentGame.getImage()));
+        //Picasso.get().load(gameList[position].img).into(imageView)
 
         TextView title = (TextView) listItem.findViewById(R.id.textView_title);
         title.setText(currentGame.getTitle());

@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
     private fun loadAndDisplayGames() {
         val dbHandler = MyDBHandler(this, null, null, 1)
         val games = dbHandler.getAllGames(sortValue)
-        val gameAdapter = BoardGameAdapter(this, games as java.util.ArrayList<BoardGame>?)
+        val gameAdapter = GameAdapter(this, games)
         listView!!.adapter = gameAdapter
 
 

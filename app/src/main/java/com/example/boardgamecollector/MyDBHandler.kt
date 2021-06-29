@@ -6,6 +6,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import androidx.core.database.getStringOrNull
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 import androidx.core.database.getIntOrNull as getIntOrNull1
 
 class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.CursorFactory?, version: Int):
@@ -182,9 +184,9 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
     }
 
     fun findGame(gameName: String): BoardGame?{
-        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_TITLE = $gameName"
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_TITLE = ?"
         val db = this.writableDatabase
-        val cursor = db.rawQuery(query, null)
+        val cursor = db.rawQuery(query, arrayOf(gameName))
         var game: BoardGame? = null
 
         if (cursor.moveToFirst()){
@@ -215,9 +217,9 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
 
     fun deleteGame(gameName: String): Boolean{
         var result = false
-        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_TITLE = $gameName"
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_TITLE = ?"
         val db = this.writableDatabase
-        val cursor = db.rawQuery(query, null)
+        val cursor = db.rawQuery(query, arrayOf(gameName))
         if (cursor.moveToFirst()){
             db.delete(TABLE_GAMES, "$COLUMN_TITLE = ?", arrayOf(gameName))
             db.delete(TABLE_DESIGNERS_GAME, "$COLUMN_DESIGNER_GAME_TITLE = ?", arrayOf(gameName))
@@ -246,7 +248,7 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
         val query = "SELECT * FROM $TABLE_GAMES ORDER BY $sortColumn"
         val db = this.writableDatabase
         val cursor = db.rawQuery(query, null)
-        val returnList:MutableList<BoardGame> = ArrayList()
+        val returnList: MutableList<BoardGame> = ArrayList()
         while (cursor.moveToNext()){
             val game = BoardGame()
             game.title = cursor.getStringOrNull(0)
@@ -260,5 +262,103 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
         db.close()
 
         return returnList
+    }
+
+    fun getLocations(): MutableList<String>{
+        val query = "SELECT * FROM $TABLE_LOCATIONS"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, null)
+        val locations: MutableList<String> = ArrayList()
+        while(cursor.moveToNext()){
+            locations.add(cursor.getStringOrNull(0)!!)
+        }
+        cursor.close()
+        db.close()
+
+        return locations
+    }
+
+    @SuppressLint("Recycle")
+    fun addDesigner(name: String, gameName: String){
+        val query = "SELECT * FROM $TABLE_DESIGNERS WHERE $COLUMN_DESIGNER_NAME = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(name))
+        if (cursor.moveToFirst()){
+            val values = ContentValues()
+            values.put(COLUMN_DESIGNER_NAME, name)
+            db.insert(TABLE_DESIGNERS, null, values)
+        }
+        cursor.close()
+
+        val query2 = "SELECT * FROM $TABLE_DESIGNERS_GAME WHERE $COLUMN_DESIGNER_GAME_NAME = ? AND $COLUMN_DESIGNER_GAME_TITLE = ?"
+        val cursor2 = db.rawQuery(query2, arrayOf(name, gameName))
+        if (cursor2.moveToFirst()){
+            val values2 = ContentValues()
+            values2.put(COLUMN_DESIGNER_GAME_NAME, name)
+            values2.put(COLUMN_DESIGNER_GAME_TITLE, gameName)
+            db.insert(TABLE_DESIGNERS_GAME, null, values2)
+        }
+        cursor2.close()
+        db.close()
+    }
+
+    fun addArtist(name: String, gameName: String){
+        val query = "SELECT * FROM $TABLE_ARTISTS WHERE $COLUMN_ARTIST_NAME = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(name))
+        if (cursor.moveToFirst()){
+            val values = ContentValues()
+            values.put(COLUMN_ARTIST_NAME, name)
+            db.insert(TABLE_ARTISTS, null, values)
+        }
+        cursor.close()
+
+        val query2 = "SELECT * FROM $TABLE_ARTISTS_GAME WHERE $COLUMN_ARTISTS_GAME_NAME = ? AND $COLUMN_ARTISTS_GAME_TITLE = ?"
+        val cursor2 = db.rawQuery(query2, arrayOf(name, gameName))
+        if (cursor2.moveToFirst()){
+            val values2 = ContentValues()
+            values2.put(COLUMN_ARTISTS_GAME_NAME, name)
+            values2.put(COLUMN_ARTISTS_GAME_TITLE, gameName)
+            db.insert(TABLE_ARTISTS_GAME, null, values2)
+        }
+        cursor2.close()
+        db.close()
+    }
+
+    fun addExpansion(name: String, gameName: String){
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(COLUMN_EXPANSION_TITLE, name)
+        values.put(COLUMN_EXPANSION_GAME, gameName)
+        db.insert(TABLE_EXPANSIONS, null, values)
+
+
+        db.close()
+    }
+
+    @SuppressLint("Recycle")
+    fun isGameInDb(gameName: String): Boolean{
+        var bool = false
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_TITLE = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(gameName))
+        if (cursor.moveToFirst()){
+            bool = true
+        }
+        db.close()
+
+        return bool
+    }
+
+    fun addGameRanking(rank: Int, gameName: String){
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(COLUMN_RANKING_RANK, rank)
+        values.put(COLUMN_RANKING_TITLE, gameName)
+        val date = LocalDateTime.now()
+        values.put(COLUMN_RANKING_DATE, date.format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")))
+        db.insert(TABLE_RANKING, null, values)
+
+        db.close()
     }
 }
