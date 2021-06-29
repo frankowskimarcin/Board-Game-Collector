@@ -345,6 +345,7 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
         if (cursor.moveToFirst()){
             bool = true
         }
+        cursor.close()
         db.close()
 
         return bool
@@ -360,5 +361,79 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
         db.insert(TABLE_RANKING, null, values)
 
         db.close()
+    }
+
+    @SuppressLint("Recycle")
+    fun isLocationIdDb(locationName: String): Boolean{
+        var bool = false
+        val query = "SELECT * FROM $TABLE_LOCATIONS WHERE $COLUMN_LOCATION_NAME = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(locationName))
+        if (cursor.moveToFirst()){
+            bool = true
+        }
+        cursor.close()
+        db.close()
+
+        return bool
+    }
+
+    fun addLocation(name: String){
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(COLUMN_LOCATION_NAME, name)
+        db.insert(TABLE_LOCATIONS, null, values)
+
+        db.close()
+    }
+
+    fun getGamesByLocation(location: String): MutableList<String>{
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_LOCATION = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(location))
+        val games: MutableList<String> = ArrayList()
+        while(cursor.moveToNext()){
+            games.add(cursor.getStringOrNull(0)!!)
+        }
+        cursor.close()
+        db.close()
+
+        return games
+    }
+
+    fun editLocation(oldLoc: String, newLoc: String){
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_LOCATION = ?"
+        val db = this.writableDatabase
+        var values = ContentValues()
+        values.put(COLUMN_LOCATION_NAME, newLoc)
+        db.update(TABLE_LOCATIONS, values, "$COLUMN_LOCATION_NAME = ?", arrayOf(oldLoc))
+        val cursor = db.rawQuery(query, arrayOf(oldLoc))
+        while(cursor.moveToNext()){
+            values = ContentValues()
+            values.put(COLUMN_LOCATION, newLoc)
+            db.update(TABLE_GAMES, values, "$COLUMN_TITLE = ?", arrayOf(cursor.getString(cursor.getColumnIndex(COLUMN_TITLE))))
+        }
+        cursor.close()
+        db.close()
+    }
+
+    fun deleteLocation(name: String) {
+        val db = this.writableDatabase
+        db.delete(TABLE_LOCATIONS, "$COLUMN_LOCATION_NAME = ?", arrayOf(name))
+        db.close()
+    }
+
+    fun isLocationEmpty(locationName: String): Boolean{
+        var bool = true
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_LOCATION = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(locationName))
+        if (cursor.moveToFirst()){
+            bool = false
+        }
+        cursor.close()
+        db.close()
+
+        return bool
     }
 }

@@ -78,7 +78,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun showActivityLocationButton(v: View){
-        val i = Intent(this, AddGameActivity::class.java) // TODO
+        val i = Intent(this, LocationsActivity::class.java)
         startActivity(i)
     }
 
