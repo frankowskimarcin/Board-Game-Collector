@@ -5,6 +5,7 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
+import android.util.Log
 import androidx.core.database.getStringOrNull
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -183,39 +184,55 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
         db.close()
     }
 
-    fun findGame(gameName: String): BoardGame?{
+    fun findGame(gameName: String): BoardGame{
         val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_TITLE = ?"
         val db = this.writableDatabase
         val cursor = db.rawQuery(query, arrayOf(gameName))
-        var game: BoardGame? = null
+        var game = BoardGame()
+
+        var title: String? = null
+        var originalTitle: String? = null
+        var publicationYear: Int? = null
+        var description: String? = null
+        var orderDate: String? = null
+        var addedDate: String? = null
+        var price: String? = null
+        var scd: String? = null
+        var code: String? = null
+        var bggId: Int? = null
+        var productionCode: String? = null
+        var ranking: Int? = null
+        var gameType: String? = null
+        var comment: String? = null
+        var image: String? = null
+        var location: String? = null
 
         if (cursor.moveToFirst()){
-            val title = cursor.getStringOrNull(0)
-            val originalTitle = cursor.getStringOrNull(1)
-            val publicationYear = cursor.getInt(3)
-            val description = cursor.getStringOrNull(4)
-            val orderDate = cursor.getStringOrNull(5)
-            val addedDate = cursor.getStringOrNull(6)
-            val price = cursor.getStringOrNull(7)
-            val scd = cursor.getStringOrNull(8)
-            val code = cursor.getStringOrNull(9)
-            val bggId = cursor.getInt(10)
-            val productionCode = cursor.getStringOrNull(1)
-            val ranking = cursor.getInt(12)
-            val gameType = cursor.getStringOrNull(13)
-            val comment = cursor.getStringOrNull(14)
-            val image = cursor.getStringOrNull(15)
-            val location = cursor.getStringOrNull(16)
-
-            game = BoardGame(title, originalTitle, publicationYear, description, orderDate, addedDate,
-                    price, scd, code, bggId, productionCode, ranking, gameType, comment, image, location)
-            cursor.close()
+            game.title = cursor.getStringOrNull(0)
+            game.originalTitle = cursor.getStringOrNull(1)
+            game.publicationYear = cursor.getInt(2)
+            game.description = cursor.getStringOrNull(3)
+            game.orderDate = cursor.getStringOrNull(4)
+            game.addedDate = cursor.getStringOrNull(5)
+            game.price = cursor.getStringOrNull(6)
+            game.scd = cursor.getStringOrNull(7)
+            game.code = cursor.getStringOrNull(8)
+            game.bggId = cursor.getInt(9)
+            game.productionCode = cursor.getStringOrNull(10)
+            game.ranking = cursor.getInt(11)
+            game.gameType = cursor.getStringOrNull(12)
+            game.comment = cursor.getStringOrNull(13)
+            game.image = cursor.getStringOrNull(14)
+            game.location = cursor.getStringOrNull(15)
         }
+        cursor.close()
+//        val game = BoardGame(title, originalTitle, publicationYear, description, orderDate, addedDate,
+//            price, scd, code, bggId, productionCode, ranking, gameType, comment, image, location)
         db.close()
         return game
     }
 
-    fun deleteGame(gameName: String): Boolean{
+    fun deleteGame(gameName: String): Boolean {
         var result = false
         val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_TITLE = ?"
         val db = this.writableDatabase
@@ -252,10 +269,11 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
         while (cursor.moveToNext()){
             val game = BoardGame()
             game.title = cursor.getStringOrNull(0)
-            game.publicationYear = cursor.getIntOrNull1(3)
-            game.description = cursor.getStringOrNull(4)
-            game.ranking = cursor.getIntOrNull1(12)
-            game.image = cursor.getStringOrNull(15)
+            game.publicationYear = cursor.getIntOrNull1(2)
+            val desc = cursor.getStringOrNull(3)?.split(".")
+            game.description = desc?.get(0)
+            game.ranking = cursor.getIntOrNull1(11)
+            game.image = cursor.getStringOrNull(14)
             returnList.add(game)
         }
         cursor.close()
@@ -435,5 +453,101 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
         db.close()
 
         return bool
+    }
+
+    fun getDesigners(name: String): MutableList<String> {
+        val query = "SELECT * FROM $TABLE_DESIGNERS_GAME WHERE $COLUMN_DESIGNER_GAME_TITLE = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(name))
+        val designers: MutableList<String> = ArrayList()
+        while(cursor.moveToNext()){
+            designers.add(cursor.getStringOrNull(1)!!)
+        }
+        cursor.close()
+        db.close()
+
+        return designers
+    }
+
+    fun getArtists(name: String): MutableList<String> {
+        val query = "SELECT * FROM $TABLE_ARTISTS_GAME WHERE $COLUMN_ARTISTS_GAME_TITLE = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(name))
+        val artists: MutableList<String> = ArrayList()
+        while(cursor.moveToNext()){
+            artists.add(cursor.getStringOrNull(1)!!)
+        }
+        cursor.close()
+        db.close()
+
+        return artists
+    }
+
+    fun getExpansions(name: String): MutableList<String> {
+        val query = "SELECT * FROM $TABLE_EXPANSIONS WHERE $COLUMN_EXPANSION_GAME = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(name))
+        val expansions: MutableList<String> = ArrayList()
+        while(cursor.moveToNext()){
+            expansions.add(cursor.getStringOrNull(1)!!)
+        }
+        cursor.close()
+        db.close()
+
+        return expansions
+    }
+
+    fun updateDesigners(designers: String, gameName: String){
+        val db = this.writableDatabase
+        db.delete(TABLE_DESIGNERS_GAME, "$COLUMN_DESIGNER_GAME_TITLE = ?", arrayOf(gameName))
+        for(i in designers.split("\n"))
+            addDesigner(i, gameName)
+        db.close()
+    }
+
+    fun updateArtists(artists: String, gameName: String){
+        val db = this.writableDatabase
+        db.delete(TABLE_ARTISTS_GAME, "$COLUMN_ARTISTS_GAME_TITLE = ?", arrayOf(gameName))
+        for(i in artists.split("\n"))
+            addArtist(i, gameName)
+        db.close()
+    }
+
+    fun updateExpansions(expansions: String, gameName: String){
+        val db = this.writableDatabase
+        db.delete(TABLE_EXPANSIONS, "$COLUMN_EXPANSION_GAME = ?", arrayOf(gameName))
+        for(i in expansions.split("\n"))
+            addArtist(i, gameName)
+        db.close()
+    }
+
+    fun updateGame(game: BoardGame){
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_TITLE = ?"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(game.title))
+
+        val values = ContentValues()
+        values.put(COLUMN_ORIGINAL_TITLE, game.originalTitle)
+        values.put(COLUMN_PUBLICATION_YEAR, game.publicationYear)
+        values.put(COLUMN_DESCRIPTION, game.description)
+        values.put(COLUMN_ORDER_DATE, game.orderDate)
+        values.put(COLUMN_ADDED_DATE, game.addedDate)
+        values.put(COLUMN_PRICE, game.price)
+        values.put(COLUMN_SCD, game.scd)
+        values.put(COLUMN_CODE, game.code)
+        values.put(COLUMN_BGG_ID, game.bggId)
+        values.put(COLUMN_PRODUCTION_CODE, game.productionCode)
+        values.put(COLUMN_RANKING, game.ranking)
+        values.put(COLUMN_GAME_TYPE, game.gameType)
+        values.put(COLUMN_COMMENT, game.comment)
+        values.put(COLUMN_IMAGE, game.image)
+        values.put(COLUMN_LOCATION, game.location)
+
+        if (cursor.moveToFirst()){
+            db.update(TABLE_GAMES, values, "$COLUMN_TITLE = ?", arrayOf(game.title))
+        }
+
+        cursor.close()
+        db.close()
     }
 }

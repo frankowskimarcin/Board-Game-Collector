@@ -1,5 +1,6 @@
 package com.example.boardgamecollector
 
+import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -57,6 +58,7 @@ class LocationsActivity : AppCompatActivity() {
         displayLocations()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun displayLocations(){
         val dbHandler = MyDBHandler(this, null, null, 1)
         val allLocScrollView: ScrollView = findViewById(R.id.allLocScrollView)
@@ -83,14 +85,24 @@ class LocationsActivity : AppCompatActivity() {
                 val games = dbHandler.getGamesByLocation(locations[i])
                 val gamesLayout: TableLayout = findViewById(R.id.gamesInLocTableLayout)
 
-                for (game in 0 until games.size){
+                if (games.isEmpty()){
                     val gameRow = TableRow(this)
                     val gameTextView = TextView(this)
                     gameTextView.textSize = 18F
-                    gameTextView.text = game.toString()
+                    gameTextView.text = "Brak gier"
                     gameRow.addView(gameTextView)
                     gamesLayout.addView(gameRow)
+                }
+                else{
+                    for (j in 0 until games.size){
+                        val gameRow = TableRow(this)
+                        val gameTextView = TextView(this)
+                        gameTextView.textSize = 18F
+                        gameTextView.text = games[j]
+                        gameRow.addView(gameTextView)
+                        gamesLayout.addView(gameRow)
 
+                    }
                 }
 
                 allLocScrollView.visibility = View.GONE

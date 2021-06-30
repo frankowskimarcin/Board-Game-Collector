@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.*
+import android.widget.AdapterView.OnItemClickListener
 import androidx.appcompat.app.AppCompatActivity
 
 
@@ -20,9 +21,8 @@ class MainActivity : AppCompatActivity() {
 //    private val sortText: TextView = findViewById(R.id.sortTextView)
 //    private val sortSpinner: Spinner = findViewById(R.id.sortSpinner)
 
-    private var listView: ListView? = null
+//    private var listView: ListView? = null
 
-    private var gamesToDelete: MutableList<String> = ArrayList()
     private var sortValue = "alfabetycznie"
 
     @SuppressLint("SetTextI18n")
@@ -30,12 +30,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val addButton: Button = findViewById(R.id.addBtn)
-        val deleteButton: Button = findViewById(R.id.deleteBtn)
         val searchButton: Button = findViewById(R.id.searchBtn)
         val locationButton: Button = findViewById(R.id.locationBtn)
         val sortText: TextView = findViewById(R.id.sortTextView)
         val sortSpinner: Spinner = findViewById(R.id.sortSpinner)
-        listView = findViewById(R.id.gamesList);
+        val listView: ListView = findViewById(R.id.gamesList);
         loadAndDisplayGames()
 
         sortText.text = "Sortuj:"
@@ -57,14 +56,26 @@ class MainActivity : AppCompatActivity() {
         }
 
 //        listView.setOnItemClickListener(object : AdapterView.OnItemClickListener {
-//            fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int,
-//                            id: Long) {
-//                val intent = Intent(context, SendMessage::class.java)
-//                val message = "abc"
-//                intent.putExtra(EXTRA_MESSAGE, message)
+//            fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+//                val intent = Intent(context, GameDetailsActivity::class.java)
+//                val message = listView.selectedItem
+//                intent.putExtra("game", message)
+//                Log.i("TAG", message)
 //                startActivity(intent)
 //            }
 //        })
+
+        listView.onItemClickListener = OnItemClickListener { _, _, position, _ ->
+            val intent = Intent(this, GameDetailsActivity::class.java)
+
+            val dbHandler = MyDBHandler(this, null, null, 1)
+            val games = dbHandler.getAllGames(sortValue)
+            val message = games[position].title
+
+            intent.putExtra("game", message.toString())
+            Log.i("TAG", message.toString())
+            startActivity(intent)
+        }
     }
 
     fun showActivityAddButton(v: View){
@@ -82,13 +93,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(i)
     }
 
-    fun onDeleteButton(v: View){
-        val dbHandler = MyDBHandler(this, null, null, 1)
-        for (game in gamesToDelete){
-            dbHandler.deleteGame(game)
-        }
-        loadAndDisplayGames()
-    }
 
     private fun addItemsOnSpinner(sortSpinner: Spinner) {
         val list: MutableList<String> = ArrayList()
@@ -104,7 +108,8 @@ class MainActivity : AppCompatActivity() {
         val dbHandler = MyDBHandler(this, null, null, 1)
         val games = dbHandler.getAllGames(sortValue)
         val gameAdapter = GameAdapter(this, games)
-        listView!!.adapter = gameAdapter
+        val listView: ListView = findViewById(R.id.gamesList);
+        listView.adapter = gameAdapter
 
 
     }

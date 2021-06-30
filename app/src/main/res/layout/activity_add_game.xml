@@ -33,8 +33,7 @@
         android:id="@+id/ScrollViewBgg"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone"
-        tools:visibility="visible">
+        android:visibility="gone">
 
         <LinearLayout
             android:id="@+id/LinearLayoutBgg"
@@ -57,10 +56,11 @@
     </ScrollView>
 
     <ScrollView
-        android:id="@+id/ScrollViewDetails"
+        android:id="@+id/DetailsScrollView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone">
+        android:visibility="gone"
+        tools:visibility="visible">
 
         <LinearLayout
             android:id="@+id/LinearLayoutDetails"

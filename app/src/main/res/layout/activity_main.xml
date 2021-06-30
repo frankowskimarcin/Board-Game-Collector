@@ -53,11 +53,8 @@
                 android:layout_width="97dp"
                 android:layout_height="52dp"
                 android:layout_marginStart="29dp"
-                android:layout_marginEnd="47dp"
                 android:onClick="showActivityAddButton"
                 android:text="Dodaj"
-                app:layout_constraintBottom_toBottomOf="@+id/deleteBtn"
-                app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/searchBtn" />
 
@@ -70,8 +67,7 @@
                 android:onClick="showActivitySearchButton"
                 android:text="Szukaj"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/deleteBtn" />
+                app:layout_constraintEnd_toEndOf="parent" />
 
             <Button
                 android:id="@+id/locationBtn"
@@ -84,16 +80,6 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/addBtn" />
 
-            <Button
-                android:id="@+id/deleteBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="54dp"
-                android:layout_marginBottom="8dp"
-                android:text="Usuń"
-                app:layout_constraintBottom_toTopOf="@+id/locationBtn"
-                app:layout_constraintEnd_toStartOf="@+id/searchBtn"
-                app:layout_constraintStart_toEndOf="@+id/addBtn" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 

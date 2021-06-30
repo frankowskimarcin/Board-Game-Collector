@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BoardGameCollector"
         android:usesCleartextTraffic="true">
-        <activity android:name=".LocationsActivity"></activity>
+        <activity android:name=".GameDetailsActivity"></activity>
+        <activity android:name=".LocationsActivity" />
         <activity android:name=".AddGameActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

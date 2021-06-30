@@ -21,17 +21,17 @@ class GameAdapter(context: Context, private val gameList: MutableList<BoardGame>
 
         val currentGame: BoardGame = gameList[position]
 
-        val rankView = listItem!!.findViewById<View>(R.id.textView_rank) as TextView
+        val rankView: TextView = listItem!!.findViewById<View>(R.id.textView_rank) as TextView
         rankView.text = currentGame.ranking.toString()
 
         val imageView = listItem.findViewById<View>(R.id.imageView) as ImageView
         Picasso.get().load(currentGame.image).resize(120, 150).into(imageView)
 
         //Picasso.get().load(gameList[position].img).into(imageView)
-        val titleView = listItem.findViewById<View>(R.id.textView_title) as TextView
+        val titleView: TextView = listItem.findViewById(R.id.textView_title)
         titleView.text = currentGame.title.toString() + " ("+ currentGame.publicationYear.toString() + ")"
 
-        val descriptionView = listItem.findViewById<View>(R.id.textView_description) as TextView
+        val descriptionView: TextView = listItem.findViewById(R.id.textView_description)
         descriptionView.text = currentGame.description.toString()
 
         return listItem

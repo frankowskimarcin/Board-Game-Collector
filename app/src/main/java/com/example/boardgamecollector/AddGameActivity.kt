@@ -44,7 +44,7 @@ class AddGameActivity : AppCompatActivity() {
     }
 
     fun onAddNewGameButton(v: View){
-        val detailsScrollView: ScrollView = findViewById(R.id.ScrollViewDetails)
+        val detailsScrollView: ScrollView = findViewById(R.id.DetailsScrollView)
         val titleEditText: EditText = findViewById(R.id.editTextTitle)
         val originalTitleEditText: EditText = findViewById(R.id.editTextOriginalTitle)
         val designersEditText: EditText = findViewById(R.id.editTextDesigners)
@@ -90,7 +90,7 @@ class AddGameActivity : AppCompatActivity() {
 
     fun onAddDetailsButton(v: View){
         val scrollViewBgg: ScrollView = findViewById(R.id.ScrollViewBgg)
-        val scrollViewDetails: ScrollView = findViewById(R.id.ScrollViewDetails)
+        val scrollViewDetails: ScrollView = findViewById(R.id.DetailsScrollView)
         scrollViewBgg.visibility = View.GONE
         scrollViewDetails.visibility = View.VISIBLE
         inputGame = BoardGame()
@@ -111,7 +111,7 @@ class AddGameActivity : AppCompatActivity() {
         }
 
         orderDateDatePicker.setOnDateChangedListener { datePicker, year, month, day ->
-            inputGame.addedDate = LocalDate.of(year, month + 1, day).toString()
+            inputGame.orderDate = LocalDate.of(year, month + 1, day).toString()
         }
 
         addedDateDatePicker.setOnDateChangedListener { datePicker, year, month, day ->
@@ -197,7 +197,7 @@ class AddGameActivity : AppCompatActivity() {
 
     fun showGames(){
         val scrollViewBgg: ScrollView = findViewById(R.id.ScrollViewBgg)
-        val scrollViewDetails: ScrollView = findViewById(R.id.ScrollViewDetails)
+        val scrollViewDetails: ScrollView = findViewById(R.id.DetailsScrollView)
         val tableLayoutBgg: TableLayout = findViewById(R.id.tableLayoutBgg)
 
         scrollViewBgg.visibility = View.VISIBLE
