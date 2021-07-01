@@ -5,7 +5,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
 import androidx.core.database.getStringOrNull
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -570,4 +569,71 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
         return returnList.joinToString("\n")
 
     }
+
+    fun getGamesBggIds(): MutableList<Int>{
+        val ids: MutableList<Int> = ArrayList()
+        val db = this.readableDatabase
+        val query = "SELECT * FROM $TABLE_GAMES"
+        val cursor = db.rawQuery(query, null)
+        while(cursor.moveToNext()){
+            ids.add(cursor.getInt(9))
+        }
+        cursor.close()
+        db.close()
+        return ids
+    }
+
+    @SuppressLint("Recycle")
+    fun isGameInDbByBggId(id: Int): Boolean{
+        var bool = false
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_BGG_ID = $id"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, null)
+        if (cursor.moveToFirst()){
+            bool = true
+        }
+        cursor.close()
+        db.close()
+
+        return bool
+    }
+
+    fun updateGameRank(bggId: Int, newRank: Int){
+        val db = this.readableDatabase
+        val values = ContentValues()
+        values.put(COLUMN_RANKING, newRank)
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_BGG_ID = $bggId"
+        val cursor = db.rawQuery(query, null)
+        if (cursor.moveToFirst()){
+            db.update(TABLE_GAMES, values, "$COLUMN_BGG_ID = $bggId", null)
+        }
+        cursor.close()
+        db.close()
+    }
+
+    fun findGameByBggId(id: Int): String{
+        var title: String = ""
+        val db = this.readableDatabase
+        val query = "SELECT * FROM $TABLE_GAMES WHERE $COLUMN_BGG_ID = $id"
+        val cursor = db.rawQuery(query, null)
+        if (cursor.moveToFirst()){
+            title = cursor.getStringOrNull(0).toString()
+            cursor.close()
+        }
+        db.close()
+        return title
+    }
+
+    fun addRank(rank: Int, title: String){
+        val db = this.writableDatabase
+        val values = ContentValues()
+        values.put(COLUMN_RANKING_DATE, LocalDateTime.now().format(DateTimeFormatter.ISO_DATE).toString())
+        values.put(COLUMN_RANKING_RANK, rank)
+        values.put(COLUMN_RANKING_TITLE, title)
+
+        db.insert(TABLE_RANKING, null, values)
+        db.close()
+    }
+
+
 }

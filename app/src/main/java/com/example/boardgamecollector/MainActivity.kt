@@ -78,13 +78,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRestart() {
+        super.onRestart()
+        loadAndDisplayGames()
+    }
+
     fun showActivityAddButton(v: View){
         val i = Intent(this, AddGameActivity::class.java)
         startActivity(i)
     }
 
     fun showActivitySearchButton(v: View){
-        val i = Intent(this, AddGameActivity::class.java) // TODO
+        val i = Intent(this, ImportBggActivity::class.java)
         startActivity(i)
     }
 
