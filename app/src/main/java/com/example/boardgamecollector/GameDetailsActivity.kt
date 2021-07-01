@@ -3,6 +3,7 @@ package com.example.boardgamecollector
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.*
 import kotlinx.android.synthetic.main.list_game.*
@@ -168,6 +169,15 @@ class GameDetailsActivity : AppCompatActivity() {
 
         val i = Intent(this, MainActivity::class.java)
         startActivity(i)
+    }
+
+    fun onRankHistoryButton(v: View){
+        val intent = Intent(this, RankHistoryActivity::class.java)
+        val message = game.title
+
+        intent.putExtra("gameTitle", message.toString())
+        Log.i("RANK", message.toString())
+        startActivity(intent)
     }
 
 //    fun onSaveEditDetailsButton(v: View){

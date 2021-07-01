@@ -550,4 +550,24 @@ class MyDBHandler (context: Context, name: String?, factory: SQLiteDatabase.Curs
         cursor.close()
         db.close()
     }
+
+    fun getRanks(gameName: String): String{
+
+        val query = "SELECT * FROM $TABLE_RANKING WHERE $COLUMN_RANKING_TITLE = ? ORDER BY $COLUMN_RANKING_DATE DESC"
+        val db = this.writableDatabase
+        val cursor = db.rawQuery(query, arrayOf(gameName))
+        val returnList: MutableList<String> = ArrayList()
+        val info = "Data         | Pozycja rankingu"
+        returnList.add(info)
+        while (cursor.moveToNext()){
+            val rank = cursor.getStringOrNull(1)!!.substring(10) + " | " + cursor.getStringOrNull(2)
+
+            returnList.add(rank)
+        }
+        cursor.close()
+        db.close()
+
+        return returnList.joinToString("\n")
+
+    }
 }

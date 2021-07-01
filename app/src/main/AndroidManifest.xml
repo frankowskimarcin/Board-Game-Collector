@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BoardGameCollector"
         android:usesCleartextTraffic="true">
-        <activity android:name=".GameDetailsActivity"></activity>
+        <activity android:name=".RankHistoryActivity"></activity>
+        <activity android:name=".GameDetailsActivity" />
         <activity android:name=".LocationsActivity" />
         <activity android:name=".AddGameActivity" />
         <activity android:name=".MainActivity">
